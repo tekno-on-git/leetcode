@@ -1,14 +1,20 @@
 class Solution {
-    public int[] dailyTemperatures(int[] temperatures) {
-        int[] res = new int[temperatures.length];
-        Stack<Pair<Integer, Integer>> st = new Stack<>();
-        for(int i=0; i < temperatures.length; i++){
-            int t = temperatures[i];
-            while(!st.isEmpty() && st.peek().getValue()  < t){
-                Pair<Integer, Integer> pop = st.pop();
-                res[pop.getKey()] = i - pop.getKey();
+    public int[] dailyTemperatures(int[] temps) {
+        int n = temps.length;
+        int[] res = new int[n];
+        int maxTemp = 0;
+
+        for(int i=n-1; i >= 0; i--){
+            if(temps[i] >= maxTemp){
+                maxTemp = temps[i];
+                continue;
             }
-            st.push(new Pair(i,t));
+
+            int days = 1;
+            while(temps[i + days] <= temps[i])
+                days += res[i + days];
+
+            res[i] = days;
         }
         return res;
     }
